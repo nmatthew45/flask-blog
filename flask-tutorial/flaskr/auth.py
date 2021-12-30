@@ -20,13 +20,18 @@ def register():
 
         if error is None:
             try:
-                db.execute("INSERT INTO user (username, password) VALUES (?, ?)", (username, generate_password_hash(password)),)
+                db.execute(
+                    "INSERT INTO user (username, password) VALUES (?, ?)",
+                    (username, generate_password_hash(password)),
+                )
                 db.commit()
             except db.IntegrityError:
-                error = f"User {username} is already registered"
+                error = f"User {username} is already registered."
             else:
                 return redirect(url_for("auth.login"))
+
         flash(error)
+
     return render_template('auth/register.html')
 
 @bp.route('/login', methods=('GET', 'POST'))
@@ -49,7 +54,7 @@ def login():
             session.clear()
             session['user_id'] = user['id']
             return redirect(url_for('index'))
-        
+
         flash(error)
 
     return render_template('auth/login.html')
